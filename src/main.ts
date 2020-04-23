@@ -7,9 +7,14 @@ import {
 } from "kafka-node";
 
 const kafkaClient = new KafkaClient();
-const consumer = new Consumer(kafkaClient, [{ topic: "create_user" }], {
+const consumer = new Consumer(kafkaClient, [
+  { topic: "create_user" },
+  { topic: "delete_user" }], {
   autoCommit: false,
 });
+consumer.on("error", error => {
+  console.error("Consumer error:", error);
+})
 const producer = new HighLevelProducer(kafkaClient);
 
 consumer.on("message", (message: Message) => {
